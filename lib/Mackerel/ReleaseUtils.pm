@@ -10,7 +10,9 @@ use IPC::Cmd qw/run/;
 use Carp qw/croak/;
 use ExtUtils::MakeMaker qw/prompt/;
 use JSON::PP qw/decode_json/;
+use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
+use Scope::Guard qw/guard/;
 use Time::Piece qw/localtime/;
 use version; our $VERSION = version->declare("v0.0.1");
 
@@ -22,7 +24,6 @@ our @EXPORT = qw/
     replace slurp spew
     parse_version decide_next_version suggest_next_version is_valid_version
     last_release merged_prs build_pull_request_body
-    scope_guard
     create_release_pull_request/;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
@@ -66,16 +67,12 @@ sub http_get {
 
 # file utils
 sub slurp {
-    my $file = shift;
-    local $/;
-    open my $fh, '<:encoding(UTF-8)', $file or die $!;
-    <$fh>
+    path(shift)->slurp_utf8
 }
 sub spew {
     my ($file, $data) = @_;
-    open my $fh, '>:encoding(UTF-8)', $file or die $!;
     $data .= "\n" if $data !~ /\n\z/ms;
-    print $fh $data;
+    path($file)->spew_utf8($data);
 }
 sub replace {
     my ($file, $code) = @_;
@@ -146,26 +143,6 @@ sub build_pull_request_body {
     $body;
 }
 
-# scope_guard
-package MCUtil::g {
-    use 5.014;
-    use warnings;
-    use utf8;
-
-    sub new {
-        my ($class, $code) = @_;
-        bless $code, $class;
-    }
-    sub DESTROY {
-        my $self = shift;
-        $self->();
-    }
-}
-sub scope_guard(&) {
-    my $code = shift;
-    MCUtil::g->new($code);
-}
-
 sub update_versions {
     my ($package_name, $current_version, $next_version) = @_;
 
@@ -188,7 +165,7 @@ sub update_changelog {
 
     my $old_locale = setlocale(LC_TIME);
     setlocale(LC_TIME, "C");
-    my $g = scope_guard {
+    my $g = guard {
         setlocale(LC_TIME, $old_locale);
     };
 
