@@ -22,8 +22,6 @@ our @EXPORT = qw/
     command_with_exit_code command git hub
     http_get
     replace slurp spew
-    parse_version decide_next_version suggest_next_version is_valid_version
-    last_release merged_prs build_pull_request_body
     create_release_pull_request/;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
@@ -34,26 +32,23 @@ sub command_with_exit_code {
 }
 
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
-sub _git {
-     state $com = do {
+
+sub git {
+    state $com = do {
         chomp(my $c = `which git`);
         die "git command is required\n" unless $c;
         $c;
     };
-}
-sub git {
-    unshift  @_, _git; goto \&command
+    unshift  @_, $com; goto \&command
 }
 
-sub _hub {
+sub hub {
     state $com = do {
         chomp(my $c = `which hub`);
         die "hub command is required\n" unless $c;
         $c;
     };
-}
-sub hub {
-    unshift @_, _hub; goto \&command;
+    unshift @_, $com; goto \&command;
 }
 
 sub http_get {
