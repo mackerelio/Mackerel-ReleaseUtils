@@ -22,8 +22,7 @@ use parent 'Exporter';
 
 our @EXPORT = qw/
     command_with_exit_code command git hub
-    http_get
-    replace slurp
+    replace
     create_release_pull_request/;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
