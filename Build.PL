@@ -8,5 +8,12 @@ use strict;
 
 use Module::Build::Tiny 0.035;
 
+use Devel::CheckBin;
+
+check_bin('git');
+check_bin('hub');
+check_bin('ghch');
+check_bin('curl');
+
 Build_PL();
 

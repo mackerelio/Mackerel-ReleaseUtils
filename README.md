@@ -1,6 +1,6 @@
 # NAME
 
-Mackerel::ReleaseUtils - It's new $module
+Mackerel::ReleaseUtils - release utilities for Mackerel (https://mackerel.io)
 
 # SYNOPSIS
 
@@ -8,15 +8,15 @@ Mackerel::ReleaseUtils - It's new $module
 
 # DESCRIPTION
 
-Mackerel::ReleaseUtils is ...
+Mackerel::ReleaseUtils provise DSLs for writing release scripts.
 
 # LICENSE
 
-Copyright (C) Songmu.
+Copyright (C) Mackerel developers.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 # AUTHOR
 
-Songmu <y.songmu@gmail.com>
+Mackerel Developers <mackerel-developers@hatena.ne.jp>
