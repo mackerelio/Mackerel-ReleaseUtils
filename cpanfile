@@ -1,4 +1,5 @@
 requires 'File::Which';
+requires 'HTTP::Tinyish';
 requires 'Path::Tiny';
 requires 'Scope::Guard';
 requires 'perl', '5.014';

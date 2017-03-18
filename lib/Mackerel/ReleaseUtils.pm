@@ -10,6 +10,7 @@ use IPC::Cmd qw/run/;
 use Carp qw/croak/;
 use ExtUtils::MakeMaker qw/prompt/;
 use File::Which qw/which/;
+use HTTP::Tinyish;
 use JSON::PP qw/decode_json/;
 use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
@@ -45,12 +46,7 @@ sub hub {
 }
 
 sub http_get {
-    my $url = shift;
-    my ($ok, $err, undef, $stdout) = run(command => [qw{curl -sf}, $url]);
-    return {
-        success => $ok,
-        content => join('', @$stdout),
-    };
+    HTTP::Tinyish->new->get(shift);
 }
 
 # file utils
