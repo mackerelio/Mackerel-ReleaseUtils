@@ -9,6 +9,7 @@ use Mackerel::ReleaseUtils::Log;
 use IPC::Cmd qw/run/;
 use Carp qw/croak/;
 use ExtUtils::MakeMaker qw/prompt/;
+use File::Which qw/which/;
 use JSON::PP qw/decode_json/;
 use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
@@ -34,20 +35,12 @@ sub command_with_exit_code {
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
 
 sub git {
-    state $com = do {
-        chomp(my $c = `which git`);
-        die "git command is required\n" unless $c;
-        $c;
-    };
+    state $com = which('git') or die "git command is requred\n";
     unshift  @_, $com; goto \&command
 }
 
 sub hub {
-    state $com = do {
-        chomp(my $c = `which hub`);
-        die "hub command is required\n" unless $c;
-        $c;
-    };
+    state $com = whihc('hub') or die "hub command is requred\n";
     unshift @_, $com; goto \&command;
 }
 
