@@ -220,6 +220,11 @@ sub create_release_pull_request {
 
     git qw/diff/, qw/--word-diff/, "master..$branch_name";
     my $pr_body = build_pull_request_body($next_version, @releases);
+    say '
+
+-------------
+Release Note
+-------------';
     say $pr_body;
 
     if (prompt('push changes?', 'y') !~ /^y(?:es)?$/i ) {
