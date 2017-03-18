@@ -4,6 +4,8 @@ use 5.014;
 use warnings;
 use utf8;
 
+use Mackerel::ReleaseUtils::Log;
+
 use IPC::Cmd qw/run/;
 use Carp qw/croak/;
 use ExtUtils::MakeMaker qw/prompt/;
@@ -17,7 +19,6 @@ use parent 'Exporter';
 our @EXPORT = qw/
     command_with_exit_code command git hub
     http_get
-    debugf infof warnf errorf
     replace slurp spew
     parse_version decide_next_version suggest_next_version is_valid_version
     last_release merged_prs build_pull_request_body
@@ -61,38 +62,6 @@ sub http_get {
         success => $ok,
         content => join('', @$stdout),
     };
-}
-
-# logger. steal from minilla
-use Term::ANSIColor qw(colored);
-use constant { LOG_DEBUG => 1, LOG_INFO => 2, LOG_WARN => 3, LOG_ERROR => 4 };
-
-my $Colors = {
-    LOG_DEBUG,   => 'green',
-    LOG_WARN,    => 'yellow',
-    LOG_INFO,    => 'cyan',
-    LOG_ERROR,   => 'red',
-};
-
-sub _printf {
-    my $type = pop;
-    return if $type == LOG_DEBUG && !DEBUG;
-    my ($temp, @args) = @_;
-    my $msg = sprintf($temp, map { defined($_) ? $_ : '-' } @args);
-    $msg = colored $msg, $Colors->{$type} if defined $type;
-    my $fh = $type && $type >= LOG_WARN ? *STDERR : *STDOUT;
-    print $fh $msg;
-}
-
-sub infof  {_printf(@_, LOG_INFO)}
-sub warnf  {_printf(@_, LOG_WARN)}
-sub debugf {_printf(@_, LOG_DEBUG)}
-sub errorf {
-    my(@msg) = @_;
-    _printf(@msg, LOG_ERROR);
-
-    my $fmt = shift @msg;
-    die sprintf($fmt, @msg);
 }
 
 # file utils
@@ -261,6 +230,9 @@ sub update_changelog {
 
 sub create_release_pull_request {
     my ($package_name, $code) = @_;
+    if (DEBUG) {
+        $Mackerel::ReleaseUtils::Log::LogLevel = Mackerel::ReleaseUtils::Log::LOG_DEBUG;
+    }
     chomp(my $current_branch = `git symbolic-ref --short HEAD`);
     my $branch_name;
     my $cleanup = sub {
