@@ -10,7 +10,6 @@ use IPC::Cmd qw/run/;
 use Carp qw/croak/;
 use ExtUtils::MakeMaker qw/prompt/;
 use File::Which qw/which/;
-use HTTP::Tinyish;
 use JSON::PP qw/decode_json/;
 use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
@@ -37,10 +36,6 @@ sub git {
 sub hub {
     state $com = whihc('hub') or die "hub command is requred\n";
     unshift @_, $com; goto \&command;
-}
-
-sub http_get {
-    HTTP::Tinyish->new->get(shift);
 }
 
 # file utils
