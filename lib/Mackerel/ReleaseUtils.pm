@@ -23,7 +23,7 @@ use parent 'Exporter';
 our @EXPORT = qw/
     command_with_exit_code command git hub
     http_get
-    replace slurp spew
+    replace slurp
     create_release_pull_request/;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
@@ -53,11 +53,6 @@ sub http_get {
 sub slurp {
     path(shift)->slurp_utf8
 }
-sub spew {
-    my ($file, $data) = @_;
-    $data .= "\n" if $data !~ /\n\z/ms;
-    path($file)->spew_utf8($data);
-}
 sub replace {
     my ($file, $code) = @_;
     if (! -f -r $file) {
@@ -65,7 +60,8 @@ sub replace {
         return
     }
     my $content = $code->(slurp($file), $file);
-    spew($file, $content);
+    $content .= "\n" if $content !~ /\n\z/ms;
+    path($file)->spew_utf8($content);
 }
 
 ## version utils
