@@ -60,6 +60,10 @@ sub spew {
 }
 sub replace {
     my ($file, $code) = @_;
+    if (! -f -r $file) {
+        warnf "file: $file doesn't exists\n";
+        return
+    }
     my $content = $code->(slurp($file), $file);
     spew($file, $content);
 }
@@ -220,7 +224,7 @@ sub create_release_pull_request {
     update_versions $package_name, $next_version;
     update_changelog $package_name, $next_version, @releases;
     # main process
-    $code->($current_version, $next_version, [@releases]);
+    $code->($current_version, $next_version, [@releases]) if $code;
     git qw/add ./;
     git qw/commit -m/, "ready for next release and update changelogs. version: $next_version";
 
