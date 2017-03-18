@@ -21,16 +21,11 @@ use version; our $VERSION = version->declare("v0.0.1");
 use parent 'Exporter';
 
 our @EXPORT = qw/
-    command_with_exit_code command git hub
+    command git hub
     replace
     create_release_pull_request/;
 
 sub DEBUG() { $ENV{MC_RELENG_DEBUG} }
-
-sub command_with_exit_code {
-    say('+ '. join ' ', @_) if DEBUG;
-    my $ret = system(@_);
-}
 
 sub command {say('+ '. join ' ', @_) if DEBUG; !system(@_) or croak $!}
 
