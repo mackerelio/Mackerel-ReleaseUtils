@@ -15,7 +15,7 @@ use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
 use Scope::Guard qw/guard/;
 use Time::Piece qw/localtime/;
-use version; our $VERSION = version->declare("v0.0.2");
+use version; our $VERSION = version->declare("v0.1.0");
 
 use parent 'Exporter';
 
@@ -39,16 +39,13 @@ sub hub {
 }
 
 # file utils
-sub slurp {
-    path(shift)->slurp_utf8
-}
 sub replace {
     my ($file, $code) = @_;
     if (! -f -r $file) {
         warnf "file: $file doesn't exists\n";
         return
     }
-    my $content = $code->(slurp($file), $file);
+    my $content = $code->(path($file)->slurp_utf8, $file);
     $content .= "\n" if $content !~ /\n\z/ms;
     path($file)->spew_utf8($content);
 }
