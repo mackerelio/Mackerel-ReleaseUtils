@@ -34,7 +34,7 @@ sub git {
 }
 
 sub hub {
-    state $com = whihc('hub') or die "hub command is requred\n";
+    state $com = which('hub') or die "hub command is requred\n";
     unshift @_, $com; goto \&command;
 }
 
