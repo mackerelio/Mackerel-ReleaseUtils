@@ -128,6 +128,7 @@ sub update_versions {
         $content =~ s/^(Version:\s+)$cur_ver_reg/$1$next_version/ms;
         $content;
     };
+    command qw/gobump set/, $next_version, '-w';
 }
 
 sub update_changelog {
@@ -206,7 +207,7 @@ sub create_release_pull_request {
 
     my @releases = merged_prs $current_version;
     infof "bump versions and update documents\n";
-    update_versions $package_name, $next_version;
+    update_versions $package_name, $current_version, $next_version;
     update_changelog $package_name, $next_version, @releases;
     # main process
     $code->($current_version, $next_version, [@releases]) if $code;
