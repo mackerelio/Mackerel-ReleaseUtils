@@ -3,4 +3,4 @@ name = "Mackerel-ReleaseUtils"
 authority="cpan:SONGMU"
 
 module_maker="ModuleBuildTiny"
-requires_external_bin=['git', 'hub', 'ghch']
+requires_external_bin=['git', 'hub', 'ghch', 'gobump']
