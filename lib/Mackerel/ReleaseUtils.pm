@@ -15,7 +15,7 @@ use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
 use Scope::Guard qw/guard/;
 use Time::Piece qw/localtime/;
-use version; our $VERSION = version->declare("v0.0.1");
+use version; our $VERSION = version->declare("v0.0.2");
 
 use parent 'Exporter';
 
