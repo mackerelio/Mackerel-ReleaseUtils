@@ -174,6 +174,15 @@ sub update_changelog {
     };
 }
 
+sub update_makefile {
+    my $next_version = shift;
+    replace 'Makefile' => sub {
+        my $content = shift;
+        $content =~ s/^VERSION = .*?\n/VERSION = $next_version\n/ms;
+        $content;
+    };
+}
+
 sub create_release_pull_request {
     my ($package_name, $code) = @_;
     if (DEBUG) {
@@ -204,6 +213,7 @@ sub create_release_pull_request {
     infof "bump versions and update documents\n";
     update_versions $package_name, $current_version, $next_version;
     update_changelog $package_name, $next_version, @releases;
+    update_makefile $next_version;
     # main process
     $code->($current_version, $next_version, [@releases]) if $code;
     git qw/add ./;
