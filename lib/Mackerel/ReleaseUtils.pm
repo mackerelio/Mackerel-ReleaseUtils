@@ -118,7 +118,7 @@ sub update_versions {
     my $cur_ver_reg = quotemeta $current_version;
 
     # update rpm spec
-    replace sprintf('packaging/rpm/%s.spec', $package_name) => sub {
+    replace sprintf('packaging/rpm/%s*.spec', $package_name) => sub {
         my $content = shift;
         $content =~ s/^(Version:\s+)$cur_ver_reg/$1$next_version/ms;
         $content;
@@ -140,7 +140,7 @@ sub update_changelog {
 
     my $now = localtime;
 
-    replace 'packaging/deb/debian/changelog' => sub {
+    replace 'packaging/deb*/debian/changelog' => sub {
         my $content = shift;
 
         my $update = sprintf "%s (%s-1) stable; urgency=low\n\n", $package_name, $next_version;
@@ -151,7 +151,7 @@ sub update_changelog {
         $update . $content;
     };
 
-    replace sprintf('packaging/rpm/%s.spec', $package_name) => sub {
+    replace sprintf('packaging/rpm/%s*.spec', $package_name) => sub {
         my $content = shift;
 
         my $update = sprintf "* %s <%s> - %s\n", $now->strftime('%a %b %d %Y'), $email, $next_version;
