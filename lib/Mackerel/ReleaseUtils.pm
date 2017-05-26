@@ -40,14 +40,12 @@ sub hub {
 
 # file utils
 sub replace {
-    my ($file, $code) = @_;
-    if (! -f -r $file) {
-        warnf "file: $file doesn't exists\n";
-        return
+    my ($glob, $code) = @_;
+    for my $file (glob $glob) {
+        my $content = $code->(path($file)->slurp_utf8, $file);
+        $content .= "\n" if $content !~ /\n\z/ms;
+        path($file)->spew_utf8($content);
     }
-    my $content = $code->(path($file)->slurp_utf8, $file);
-    $content .= "\n" if $content !~ /\n\z/ms;
-    path($file)->spew_utf8($content);
 }
 
 ## version utils
