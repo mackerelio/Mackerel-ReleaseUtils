@@ -44,7 +44,10 @@ sub replace {
     for my $file (glob $glob) {
         my $content = $code->(path($file)->slurp_utf8, $file);
         $content .= "\n" if $content !~ /\n\z/ms;
-        path($file)->spew_utf8($content);
+
+        my $f = path($file);
+        # for keeping permission
+        $f->append_utf8({truncate => 1}, $content);
     }
 }
 
