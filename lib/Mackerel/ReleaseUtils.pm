@@ -126,6 +126,13 @@ sub update_versions {
     command qw/gobump set/, $next_version, '-w';
 }
 
+sub _detect_debian_revision {
+    my ($packagen_name, $content) = @_;
+    my $p = quotemeta $packagen_name;
+    my ($debian_revision) = $content =~ /^$p \([0-9]+(?:\.[0-9]+){2}-([^)]+)\) stable;/ms;
+    $debian_revision;
+}
+
 sub update_changelog {
     my ($package_name, $next_version, @releases) = @_;
 
@@ -143,7 +150,10 @@ sub update_changelog {
     replace 'packaging/deb*/debian/changelog' => sub {
         my $content = shift;
 
-        my $update = sprintf "%s (%s-1) stable; urgency=low\n\n", $package_name, $next_version;
+        my $debian_revision = _detect_debian_revision($package_name, $content);
+
+        my $update = sprintf "%s (%s-%s) stable; urgency=low\n\n",
+            $package_name, $next_version, $debian_revision;
         for my $rel (@releases) {
             $update .= sprintf "  * %s (by %s)\n    <%s>\n", $rel->{title}, $rel->{user}{login}, $rel->{html_url};
         }
