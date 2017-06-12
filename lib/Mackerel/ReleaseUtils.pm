@@ -232,7 +232,7 @@ sub create_release_pull_request {
     git qw/add ./;
     git qw/commit -m/, "ready for next release and update changelogs. version: $next_version";
 
-    git qw/diff/, qw/--word-diff/, "master..$branch_name";
+    git qw/diff/, qw/--word-diff/, "origin/master..$branch_name";
     my $pr_body = build_pull_request_body($next_version, @releases);
     say '
 
