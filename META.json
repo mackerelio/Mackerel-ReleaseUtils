@@ -67,7 +67,7 @@
          "web" : "https://github.com/mackerelio/Mackerel-ReleaseUtils"
       }
    },
-   "version" : "v0.2.0",
+   "version" : "v0.2.1",
    "x_authority" : "cpan:SONGMU",
    "x_contributors" : [
       "Shoichi Kaji <skaji@cpan.org>",
