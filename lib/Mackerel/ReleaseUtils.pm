@@ -201,6 +201,12 @@ sub create_release_pull_request {
     if (DEBUG) {
         $Mackerel::ReleaseUtils::Log::LogLevel = Mackerel::ReleaseUtils::Log::LOG_DEBUG;
     }
+
+    # exit if workspace is dirty
+    if (`git status --porcelain`) {
+        die "git workspace is dirty. Make it clean to continue\n";
+    }
+
     chomp(my $current_branch = `git symbolic-ref --short HEAD`);
     my $branch_name;
     my $cleanup = sub {
