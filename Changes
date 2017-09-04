@@ -2,7 +2,7 @@ Revision history for Perl extension Mackerel-ReleaseUtils
 
 {{$NEXT}}
 
-v0.2.2 2017-09-04T06:09:53Z
+v0.2.2 2017-09-04T06:24:54Z
     - Die when git workspace is dirty
 
 v0.2.1 2017-06-12T09:51:59Z
