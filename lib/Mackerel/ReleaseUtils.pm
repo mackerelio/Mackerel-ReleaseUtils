@@ -99,8 +99,8 @@ sub merged_prs {
     my $current_tag = shift;
 
     my $data = eval { decode_json scalar `ghch -f v$current_tag` };
-    if ($! || $@) {
-        die "parse json failed: $@";
+    if ($! || $@ || $?) {
+        die "calling ghch and/or decoding json failed: $@";
     }
     return grep {$_->{title} !~ /\[nitp?\]/i} @{ $data->{pull_requests} };
 }
