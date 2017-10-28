@@ -15,7 +15,7 @@ use Path::Tiny qw/path/;
 use POSIX qw(setlocale LC_TIME);
 use Scope::Guard qw/guard/;
 use Time::Piece qw/localtime/;
-use version; our $VERSION = version->declare("v0.2.2");
+use version; our $VERSION = version->declare("v0.2.3");
 
 use parent 'Exporter';
 
@@ -275,7 +275,7 @@ Mackerel::ReleaseUtils - release utilities for Mackerel (https://mackerel.io)
 
 =head1 DESCRIPTION
 
-Mackerel::ReleaseUtils provise DSLs for writing release scripts.
+Mackerel::ReleaseUtils provides DSLs for writing release scripts.
 
 =head1 LICENSE
 
