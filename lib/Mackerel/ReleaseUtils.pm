@@ -191,7 +191,7 @@ sub update_makefile {
     my $next_version = shift;
     replace 'Makefile' => sub {
         my $content = shift;
-        $content =~ s/^VERSION (:?=) .*?\n/VERSION $1 $next_version\n/ms;
+        $content =~ s/^VERSION( *:*= *).*?\n/VERSION$1$next_version\n/ms;
         $content;
     };
 }
