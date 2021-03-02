@@ -1,6 +1,7 @@
 Revision history for Perl extension Mackerel-ReleaseUtils
 
 {{$NEXT}}
+    - Support specifying next version in create_release_pull_request
 
 v0.2.4 2019-03-07T08:02:27Z
     - Support simply expanded binding in Makefile
